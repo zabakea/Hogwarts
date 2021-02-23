@@ -24,7 +24,7 @@ function prepareObjects(studentList) {
     const Student = {
       firstName: "",
       lastName: "",
-      middleName: null,
+      middleName: undefined,
       nickName: null,
       image: null,
       house: "",
@@ -33,27 +33,39 @@ function prepareObjects(studentList) {
 
     const name = oneStudent.fullname.trim().replaceAll("-", " ");
     let firstname;
+
     if (name.includes(" ")) {
       firstname = name.substring(0, name.indexOf(" "));
     } else {
       firstname = name;
     }
-    //console.log(firstname);
 
+    let middle;
     let middlename = "";
     let nickname = "";
+    if (name.indexOf(" ") !== name.lastIndexOf(" ")) {
+      middle = name.substring(name.indexOf(" ") + 1, name.lastIndexOf(" "));
+
+      if (middle.includes('"')) {
+        nickname = middle.replace('"', " ");
+        nickname = nickname.replace('"', " ");
+        nickname = nickname.trim();
+        nickname =
+          nickname.charAt(0).toUpperCase() + nickname.slice(1).toLowerCase();
+      } else {
+        middlename = name.substring(
+          name.indexOf(" ") + 1,
+          name.lastIndexOf(" ")
+        );
+      }
+    }
+
     let lastname = name.substring(name.lastIndexOf(" ") + 1);
-    let middle = name.substring(name.indexOf(" ") + 1, name.lastIndexOf(" "));
+
     let hOUSE = oneStudent.house.trim();
 
     if (lastname == firstname) {
       lastname = "";
-    }
-
-    if (middle.includes('"')) {
-      nickname = middle;
-    } else {
-      middlename = name.substring(name.indexOf(" ") + 1, name.lastIndexOf(" "));
     }
 
     const middleName = capitalization(middlename);
@@ -83,11 +95,3 @@ function prepareObjects(studentList) {
     console.table(student);
   });
 }
-
-// firstName: "",
-// lastName: "",
-// middleName: null,
-// nickName: null,
-// image: null,
-// house: "",
-// gender: "",
